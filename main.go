@@ -8,6 +8,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("%s %s %s\n", r.Method, r.URL.Path, r.Response.Status)
 		fmt.Fprintf(w, "Hello! you've requested %s\n", r.URL.Path)
 	})
 
