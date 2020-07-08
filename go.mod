@@ -1,3 +1,3 @@
-module gitlab.com/digitalocean/sample-golang
+module github.com/nicktate/sample-golang
 
 go 1.13
