@@ -1,1 +1,3 @@
-web: bin/sample-golang
+web: echo "web: " && bin/sample-golang
+second: echo "second: " && bin/sample-golang
+dd: -- echo "second: " && bin/sample-golang

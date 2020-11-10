@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app-build: "true"
+    app-component: sample-golang
+    app-component-uuid: c4b2abf1-3fa8-47e2-b953-c208a1fe788f
+    app-id: dc3eb13d-5a4f-4305-9f89-d0d2ed88c0f8
+    app-owner-id: "6697625"
+    app-owner-uuid: 41daeafc89569f30619845f84e60ffa540cd243e
+    component-type: service
+    controller-uid: 6ba7802a-acc7-437c-9f75-99ddbfa92117
+    deployment: deployment-3ad944ae-0eb6-4838-a984-6a6d68179a85
+    deployment-uuid: 3ad944ae-0eb6-4838-a984-6a6d68179a85
+    job-name: sample-golang
+  name: sample-golang-nick
+  namespace: build-3ad944ae-0eb6-4838-a984-6a6d68179a85
+spec:
+  activeDeadlineSeconds: 3600
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: apps.digitalocean.com/node-class
+            operator: In
+            values:
+            - appbuild
+  automountServiceAccountToken: false
+  containers:
+  - env:
+    - name: GIT_SOURCE_URL
+      value: https://x-access-token:v1.dd69b0ebefffffb7bfcdcbed9428150acb84b752@github.com/nicktate/sample-golang.git
+    - name: SOURCE_DIR
+    - name: APP_PLATFORM_COMPONENT_TYPE
+      value: service
+    - name: ENVIRONMENT_SLUG
+      value: go
+    - name: APP_IMAGE_URL
+      value: registry.digitalocean.com/apps-41daeafc89569f30619845f84e60ffa540cd243e/dc3eb13d-5a4f-4305-9f89-d0d2ed88c0f8-sample-golang:3ad944ae-0eb6-4838-a984-6a6d68179a85
+    - name: PREVIOUS_APP_IMAGE_URL
+      value: registry.digitalocean.com/apps-41daeafc89569f30619845f84e60ffa540cd243e/dc3eb13d-5a4f-4305-9f89-d0d2ed88c0f8-sample-golang:638c390f-9a0a-49b3-93ef-713ce17c205d
+    - name: APP_CACHE_URL
+      value: registry.digitalocean.com/apps-41daeafc89569f30619845f84e60ffa540cd243e/dc3eb13d-5a4f-4305-9f89-d0d2ed88c0f8-sample-golang/cache
+    - name: GIT_COMMIT
+      value: 9927ad4902ac3c876b6471c87246e056eda11f82
+    envFrom:
+    - prefix: APP_VAR_
+      secretRef:
+        name: sample-golang-envs
+    image: ntate22/apps-builder:f62f7e1
+    imagePullPolicy: Always
+    command: 
+    - bash
+    - -c
+    - "sleep infinity"
+    name: build
+    resources:
+      limits:
+        cpu: "4"
+        ephemeral-storage: 4G
+        memory: 8Gi
+      requests:
+        cpu: "2"
+        ephemeral-storage: 4G
+        memory: 2Gi
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /etc/docker
+      name: regcred
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: false
+  nodeName: pool-appsail-appbuild-s-8vcpu-16gb-3hd6p
+  nodeSelector:
+    apps.digitalocean.com/node-class: appbuild
+  priority: 10
+  priorityClassName: default-priority-class
+  restartPolicy: Never
+  runtimeClassName: gvisor-ptrace-overlay
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: appsail.digitalocean.com/dedicate
+    operator: Equal
+    value: appbuild
+  - effect: NoExecute
+    key: apps.digitalocean.com/dedicate
+    operator: Equal
+    value: appbuild
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: regcred
+    secret:
+      defaultMode: 384
+      items:
+      - key: .dockerconfigjson
+        path: config.json
+      secretName: sample-golang-registry
