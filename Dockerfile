@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine AS build
+FROM library/perl:5.20
 
 WORKDIR /src
 ENV CGO_ENABLED=0
@@ -9,5 +9,3 @@ RUN go mod download
 COPY . .
 RUN go build -o /out/sample-golang .
 
-FROM scratch AS bin
-COPY --from=build /out/sample-golang /bin/
