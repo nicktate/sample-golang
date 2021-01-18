@@ -1,1 +1,1 @@
-web: exit 1
+web: echo test && exit 1
